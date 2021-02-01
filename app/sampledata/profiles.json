@@ -1,0 +1,150 @@
+{
+  "profiles": [
+    {
+      "name": "Mia",
+      "age": 22,
+      "gender": "FEMALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Jonas",
+      "gender": "MALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Luca",
+      "age": 24,
+      "gender": "MALE",
+      "location": {
+        "city": "Berlin",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Emma",
+      "age": 30,
+      "gender": "FEMALE",
+      "location": {
+        "city": "Bremen",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Leon",
+      "age": 40,
+      "gender": "MALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Finn",
+      "age": 31,
+      "gender": "MALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Sophie",
+      "age": 32,
+      "gender": "FEMALE",
+      "location": {
+        "city": "Bremen",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Noah",
+      "age": 29,
+      "gender": "MALE",
+      "location": {
+        "city": "Lübeck",
+        "zip": "21966"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Leonie",
+      "age": 16,
+      "gender": "FEMALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Elias",
+      "gender": "MALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Ben",
+      "age": 33,
+      "gender": "MALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Emilia",
+      "age": 28,
+      "gender": "FEMALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Liam",
+      "age": 27,
+      "gender": "MALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "21029"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Marie",
+      "gender": "FEMALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    },
+    {
+      "name": "Mila",
+      "gender": "FEMALE",
+      "location": {
+        "city": "Hamburg",
+        "zip": "20095"
+      },
+      "description": "Lorem ipsum dolorsitamet,consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et"
+    }
+  ]
+}
