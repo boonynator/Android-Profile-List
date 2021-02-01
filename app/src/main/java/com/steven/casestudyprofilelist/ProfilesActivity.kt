@@ -25,23 +25,19 @@ class ProfilesActivity : AppCompatActivity() {
         val recyclerViewAdapter = ProfileAdapter(emptyList())
         recyclerView.adapter = recyclerViewAdapter
 
-        val testUser1 = UserProfile("Anna", 17, "FEMALE", "Test1", "22397", "Hamburg")
-        val testUser2 = UserProfile("Magnus", 29, "MALE", "Test2", "28201", "Bremen")
-        val testUser3 = UserProfile("Steven", null, "MALE", "Test3", "00001", "Mars")
-        recyclerViewAdapter.addItems(listOf(testUser1, testUser2, testUser3))
-
-        Log.e(PROFILES_TAG, processProfilesJson().toString())
+        recyclerViewAdapter.addItems(processProfilesJson())
     }
 
-    fun processProfilesJson(): List<UserProfile> {
+    private fun processProfilesJson(): List<UserProfile> {
         val newProfileList: MutableList<UserProfile> = listOf<UserProfile>().toMutableList()
         val jsonReader = JsonReader(baseContext.assets.open("profiles.json").reader())
         jsonReader.beginObject()
-        while (jsonReader.hasNext()) {
-            if (jsonReader.nextName() == "profiles") {
-                jsonReader.beginArray()
+        if (jsonReader.nextName() == "profiles") {
+            jsonReader.beginArray()
+            while (jsonReader.hasNext()) {
                 newProfileList += createProfilesFromString(jsonReader)
             }
+            jsonReader.endArray()
         }
         jsonReader.endObject()
         return newProfileList
@@ -55,8 +51,8 @@ class ProfilesActivity : AppCompatActivity() {
         var zipCode = ""
         var city = ""
 
+        reader.beginObject()
         while (reader.hasNext()) {
-            reader.beginObject()
             val token = reader.nextName()
             if (token == "name") name = reader.nextString()
             if (token == "age") age = reader.nextInt()
@@ -68,8 +64,8 @@ class ProfilesActivity : AppCompatActivity() {
                 zipCode = locationList[1]
             }
             Log.d(PROFILES_TAG, token)
-            reader.endObject()
         }
+        reader.endObject()
 
         return UserProfile(name, age, gender, description, zipCode, city)
     }
