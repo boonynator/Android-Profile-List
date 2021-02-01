@@ -1,15 +1,15 @@
 package com.steven.casestudyprofilelist
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.JsonReader
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import com.steven.casestudyprofilelist.models.UserProfile
+import com.steven.casestudyprofilelist.helpers.processProfilesJson
+import com.steven.casestudyprofilelist.models.UserModel
 
 class ProfilesActivity : AppCompatActivity() {
 
@@ -23,65 +23,13 @@ class ProfilesActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_profiles)
         val recyclerViewAdapter = ProfileAdapter(emptyList())
-        recyclerView.adapter = recyclerViewAdapter
 
-        recyclerViewAdapter.addItems(processProfilesJson())
-    }
-
-    private fun processProfilesJson(): List<UserProfile> {
-        val newProfileList: MutableList<UserProfile> = listOf<UserProfile>().toMutableList()
-        val jsonReader = JsonReader(baseContext.assets.open("profiles.json").reader())
-        jsonReader.beginObject()
-        if (jsonReader.nextName() == "profiles") {
-            jsonReader.beginArray()
-            while (jsonReader.hasNext()) {
-                newProfileList += createProfilesFromString(jsonReader)
-            }
-            jsonReader.endArray()
+        recyclerView.apply {
+            adapter = recyclerViewAdapter
+            addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
         }
-        jsonReader.endObject()
-        return newProfileList
-    }
 
-    private fun createProfilesFromString(reader: JsonReader): UserProfile {
-        var name = ""
-        var age: Int? = null
-        var gender = ""
-        var description = ""
-        var zipCode = ""
-        var city = ""
-
-        reader.beginObject()
-        while (reader.hasNext()) {
-            val token = reader.nextName()
-            if (token == "name") name = reader.nextString()
-            if (token == "age") age = reader.nextInt()
-            if (token == "gender") gender = reader.nextString()
-            if (token == "description") description = reader.nextString()
-            if (token == "location") {
-                val locationList = readLocationFromJson(reader)
-                city = locationList[0]
-                zipCode = locationList[1]
-            }
-            Log.d(PROFILES_TAG, token)
-        }
-        reader.endObject()
-
-        return UserProfile(name, age, gender, description, zipCode, city)
-    }
-
-    private fun readLocationFromJson(reader: JsonReader): List<String> {
-        val locationList = emptyList<String>().toMutableList()
-        reader.beginObject()
-        while (reader.hasNext()) {
-            val token = reader.nextName()
-            if (token == "city") locationList += reader.nextString()
-            if (token == "zip") locationList += reader.nextString()
-            Log.d(PROFILES_TAG, token)
-        }
-        reader.endObject()
-
-        return locationList
+        recyclerViewAdapter.addItems(processProfilesJson(baseContext))
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -100,10 +48,8 @@ class ProfilesActivity : AppCompatActivity() {
         }
     }
 
-    class ProfileAdapter(private var profiles: List<UserProfile>) :
+    class ProfileAdapter(private var models: List<UserModel>) :
         RecyclerView.Adapter<ProfileAdapter.ViewHolder>() {
-
-        var itemClick: ((UserProfile) -> Unit)? = null
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val avatarView: ImageView = view.findViewById(R.id.imageview_profile_avatar)
@@ -113,19 +59,22 @@ class ProfilesActivity : AppCompatActivity() {
 
             init {
                 view.setOnClickListener {
-                    itemClick?.invoke(profiles[adapterPosition])
-                    Snackbar.make(
-                        view,
-                        "Clicked on ${profiles[adapterPosition]}]",
-                        Snackbar.LENGTH_SHORT
-                    ).show()
+                    val bundle = Bundle()
+                    bundle.putString("gender", models[adapterPosition].gender)
+                    bundle.putString("name", models[adapterPosition].name)
+                    if(models[adapterPosition].age != null) {
+                        bundle.putInt("age", models[adapterPosition].age!!)
+                    }
+                    bundle.putString("location", models[adapterPosition].formattedLocation())
+                    val intent = Intent(view.context, ProfileDetailActivity().javaClass)
+                    view.context.startActivity(intent, bundle)
                 }
             }
         }
 
-        fun addItems(profilesToAdd: List<UserProfile>) {
-            val previousLastPosition = profiles.size - 1
-            profiles += profilesToAdd
+        fun addItems(profilesToAdd: List<UserModel>) {
+            val previousLastPosition = models.size - 1
+            models += profilesToAdd
             notifyItemRangeInserted(previousLastPosition, profilesToAdd.size)
         }
 
@@ -142,24 +91,24 @@ class ProfilesActivity : AppCompatActivity() {
 
             holder.avatarView
                 .setImageResource(
-                    if (profiles[position].gender == "MALE")
+                    if (models[position].gender == "MALE")
                         R.drawable.ic_user_male
                     else R.drawable.ic_female_user
                 )
 
-            if (profiles[position].hasAge()) {
-                holder.ageView.text = profiles[position].age.toString()
+            if (models[position].hasAge()) {
+                holder.ageView.text = models[position].age.toString()
             } else {
                 holder.ageView.visibility = View.INVISIBLE
             }
 
-            holder.locationView.text = profiles[position].formattedLocation()
+            holder.locationView.text = models[position].formattedLocation()
             // put name in textview
-            holder.nameView.text = profiles[position].formattedName()
+            holder.nameView.text = models[position].formattedName()
         }
 
         override fun getItemCount(): Int {
-            return profiles.size
+            return models.size
         }
 
     }

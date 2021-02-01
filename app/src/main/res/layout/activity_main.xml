@@ -18,6 +18,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="50dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"/>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,6 +1,6 @@
 package com.steven.casestudyprofilelist.models
 
-data class UserProfile constructor(
+data class UserModel constructor(
     // declare all as var since it makes sense for them to be mutable
     // (unless you wanna create a user every single time)
     var name: String,
