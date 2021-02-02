@@ -34,15 +34,25 @@
             android:id="@+id/textview_profile_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
             app:layout_constraintLeft_toRightOf="@id/textview_profile_name"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textview_profile_location"
+            android:id="@+id/textview_profile_zip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toRightOf="@id/imageview_profile_avatar"
             app:layout_constraintTop_toBottomOf="@id/textview_profile_name" />
+
+        <TextView
+            android:id="@+id/textview_profile_city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_constraintLeft_toRightOf="@id/textview_profile_zip"
+            app:layout_constraintTop_toBottomOf="@id/textview_profile_name" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

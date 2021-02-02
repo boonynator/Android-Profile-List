@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import com.steven.casestudyprofilelist.helpers.processProfilesJson
-import com.steven.casestudyprofilelist.models.UserModel
+import com.steven.casestudyprofilelist.helpers.GsonProfileParser
+import com.steven.casestudyprofilelist.models.Profiles
 
 class ProfilesActivity : AppCompatActivity() {
 
@@ -22,14 +22,14 @@ class ProfilesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_profiles)
-        val recyclerViewAdapter = ProfileAdapter(emptyList())
+        val recyclerViewAdapter = ProfileAdapter(Profiles(emptyList()))
 
         recyclerView.apply {
             adapter = recyclerViewAdapter
             addItemDecoration(DividerItemDecoration(this.context, DividerItemDecoration.VERTICAL))
         }
 
-        recyclerViewAdapter.addItems(processProfilesJson(baseContext))
+        recyclerViewAdapter.addItems(GsonProfileParser(applicationContext).readDataFromJson())
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -48,34 +48,36 @@ class ProfilesActivity : AppCompatActivity() {
         }
     }
 
-    class ProfileAdapter(private var models: List<UserModel>) :
+    class ProfileAdapter(private var models: Profiles) :
         RecyclerView.Adapter<ProfileAdapter.ViewHolder>() {
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val avatarView: ImageView = view.findViewById(R.id.imageview_profile_avatar)
             val nameView: TextView = view.findViewById(R.id.textview_profile_name)
             val ageView: TextView = view.findViewById(R.id.textview_profile_age)
-            val locationView: TextView = view.findViewById(R.id.textview_profile_location)
+            val cityView: TextView = view.findViewById(R.id.textview_profile_city)
+            val zipView: TextView = view.findViewById(R.id.textview_profile_zip)
 
             init {
                 view.setOnClickListener {
                     val bundle = Bundle()
-                    bundle.putString("gender", models[adapterPosition].gender)
-                    bundle.putString("name", models[adapterPosition].name)
-                    if(models[adapterPosition].age != null) {
-                        bundle.putInt("age", models[adapterPosition].age!!)
+                    bundle.putString("gender", models.profiles[adapterPosition].gender)
+                    bundle.putString("name", models.profiles[adapterPosition].name)
+                    if (models.profiles[adapterPosition].age != null) {
+                        bundle.putInt("age", models.profiles[adapterPosition].age!!)
                     }
-                    bundle.putString("location", models[adapterPosition].formattedLocation())
-                    val intent = Intent(view.context, ProfileDetailActivity().javaClass)
-                    view.context.startActivity(intent, bundle)
+                    bundle.putParcelable("location", models.profiles[adapterPosition].location)
+                    val intent = Intent(view.context, ProfileDetailActivity::class.java)
+                        .putExtras(bundle)
+                    view.context.startActivity(intent)
                 }
             }
         }
 
-        fun addItems(profilesToAdd: List<UserModel>) {
-            val previousLastPosition = models.size - 1
-            models += profilesToAdd
-            notifyItemRangeInserted(previousLastPosition, profilesToAdd.size)
+        fun addItems(profilesToAdd: Profiles) {
+            val previousLastPosition = models.profiles.size - 1
+            models = profilesToAdd
+            notifyItemRangeInserted(previousLastPosition, profilesToAdd.profiles.size)
         }
 
         override fun onCreateViewHolder(
@@ -91,24 +93,29 @@ class ProfilesActivity : AppCompatActivity() {
 
             holder.avatarView
                 .setImageResource(
-                    if (models[position].gender == "MALE")
+                    if (models.profiles[position].gender == "MALE")
                         R.drawable.ic_user_male
                     else R.drawable.ic_female_user
                 )
 
-            if (models[position].hasAge()) {
-                holder.ageView.text = models[position].age.toString()
+            val age = models.profiles[position].age
+
+            if (age != null) {
+                holder.ageView.text = age.toString()
+                val formattedName = "${models.profiles[position].name}, "
+                holder.nameView.text = formattedName
             } else {
+                holder.nameView.text = models.profiles[position].name
                 holder.ageView.visibility = View.INVISIBLE
             }
 
-            holder.locationView.text = models[position].formattedLocation()
+            holder.zipView.text = models.profiles[position].location.zip
+            holder.cityView.text = models.profiles[position].location.city
             // put name in textview
-            holder.nameView.text = models[position].formattedName()
         }
 
         override fun getItemCount(): Int {
-            return models.size
+            return models.profiles.size
         }
 
     }
