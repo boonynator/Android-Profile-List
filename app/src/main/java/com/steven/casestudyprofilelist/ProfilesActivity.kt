@@ -1,5 +1,6 @@
 package com.steven.casestudyprofilelist
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -22,7 +23,7 @@ class ProfilesActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_profiles)
-        val recyclerViewAdapter = ProfileAdapter(Profiles(emptyList()))
+        val recyclerViewAdapter = ProfileAdapter(Profiles(emptyList()), this)
 
         recyclerView.apply {
             adapter = recyclerViewAdapter
@@ -48,7 +49,7 @@ class ProfilesActivity : AppCompatActivity() {
         }
     }
 
-    class ProfileAdapter(private var models: Profiles) :
+    class ProfileAdapter(private var models: Profiles, val context: Context) :
         RecyclerView.Adapter<ProfileAdapter.ViewHolder>() {
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -60,24 +61,25 @@ class ProfilesActivity : AppCompatActivity() {
 
             init {
                 view.setOnClickListener {
+                    val intent = Intent(context, ProfileDetailActivity::class.java)
                     val bundle = Bundle()
+
                     bundle.putString("gender", models.profiles[adapterPosition].gender)
                     bundle.putString("name", models.profiles[adapterPosition].name)
+                    bundle.putString("description", models.profiles[adapterPosition].description)
                     if (models.profiles[adapterPosition].age != null) {
                         bundle.putInt("age", models.profiles[adapterPosition].age!!)
                     }
                     bundle.putParcelable("location", models.profiles[adapterPosition].location)
-                    val intent = Intent(view.context, ProfileDetailActivity::class.java)
-                        .putExtras(bundle)
-                    view.context.startActivity(intent)
+                    intent.putExtras(bundle)
+                    context.startActivity(intent)
                 }
             }
         }
 
         fun addItems(profilesToAdd: Profiles) {
-            val previousLastPosition = models.profiles.size - 1
             models = profilesToAdd
-            notifyItemRangeInserted(previousLastPosition, profilesToAdd.profiles.size)
+            notifyDataSetChanged()
         }
 
         override fun onCreateViewHolder(
@@ -90,7 +92,6 @@ class ProfilesActivity : AppCompatActivity() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
             holder.avatarView
                 .setImageResource(
                     if (models.profiles[position].gender == "MALE")
@@ -101,17 +102,15 @@ class ProfilesActivity : AppCompatActivity() {
             val age = models.profiles[position].age
 
             if (age != null) {
-                holder.ageView.text = age.toString()
                 val formattedName = "${models.profiles[position].name}, "
                 holder.nameView.text = formattedName
+                holder.ageView.text = age.toString()
             } else {
                 holder.nameView.text = models.profiles[position].name
-                holder.ageView.visibility = View.INVISIBLE
             }
 
-            holder.zipView.text = models.profiles[position].location.zip
+            holder.zipView.text = "${models.profiles[position].location.zip} "
             holder.cityView.text = models.profiles[position].location.city
-            // put name in textview
         }
 
         override fun getItemCount(): Int {

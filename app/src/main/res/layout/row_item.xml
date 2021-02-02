@@ -34,7 +34,6 @@
             android:id="@+id/textview_profile_age"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             app:layout_constraintLeft_toRightOf="@id/textview_profile_name"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,10 +48,8 @@
             android:id="@+id/textview_profile_city"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             app:layout_constraintLeft_toRightOf="@id/textview_profile_zip"
             app:layout_constraintTop_toBottomOf="@id/textview_profile_name" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
