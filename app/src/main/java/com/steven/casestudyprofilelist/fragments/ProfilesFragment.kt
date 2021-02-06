@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.steven.casestudyprofilelist.R
 import com.steven.casestudyprofilelist.adapters.ProfileAdapter
 import com.steven.casestudyprofilelist.helpers.GsonProfileParser
-import com.steven.casestudyprofilelist.models.Location
-import com.steven.casestudyprofilelist.models.Profile
 import com.steven.casestudyprofilelist.models.Profiles
 
 class ProfilesFragment : Fragment() {

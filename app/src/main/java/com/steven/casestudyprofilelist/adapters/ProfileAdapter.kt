@@ -1,7 +1,6 @@
 package com.steven.casestudyprofilelist.adapters
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.steven.casestudyprofilelist.ProfileSlideActivity
 import com.steven.casestudyprofilelist.R
-import com.steven.casestudyprofilelist.fragments.ProfileDetailFragment
+import com.steven.casestudyprofilelist.fragments.ProfileSlideFragment
 import com.steven.casestudyprofilelist.models.Profiles
 
 /**
@@ -35,21 +33,17 @@ class ProfileAdapter(private val models: Profiles, private val context: Context)
 
         init {
             view.setOnClickListener {
-                val intent = Intent(context, ProfileSlideActivity::class.java)
-                val bundle = Bundle()
-                bundle.putParcelable("user", models.profiles[adapterPosition])
-                bundle.putParcelable("user_list", models)
-                bundle.putInt("user_index", adapterPosition)
-                intent.putExtras(bundle)
-
-//                val detailFragment = ProfileDetailFragment()
-//                detailFragment.arguments = bundle
-//                val activity = context as FragmentActivity
-//                activity.supportFragmentManager.beginTransaction()
-//                    .replace(R.id.fragment_container, detailFragment)
-//                    .addToBackStack(null)
-//                    .commit()
-                context.startActivity(intent)
+                val slideFragment = ProfileSlideFragment()
+                slideFragment.arguments = Bundle().apply {
+                    putParcelable("user_list", models)
+                    putInt("user_index", adapterPosition)
+                }
+                if (context is FragmentActivity) {
+                    context.supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, slideFragment)
+                        .addToBackStack(null)
+                        .commit()
+                }
             }
         }
     }
@@ -99,8 +93,6 @@ class ProfileAdapter(private val models: Profiles, private val context: Context)
         holder.cityView.text = models.profiles[position].location.city
     }
 
-    override fun getItemCount(): Int {
-        return models.profiles.size
-    }
+    override fun getItemCount(): Int = models.profiles.size
 
 }

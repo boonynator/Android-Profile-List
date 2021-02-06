@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProfileSlideActivity"
+            android:name=".fragments.ProfileSlideFragment"
             android:parentActivityName=".MainActivity" />
     </application>
 

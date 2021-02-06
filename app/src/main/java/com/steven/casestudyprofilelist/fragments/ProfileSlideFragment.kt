@@ -1,38 +1,43 @@
-package com.steven.casestudyprofilelist
+package com.steven.casestudyprofilelist.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.steven.casestudyprofilelist.fragments.ProfileDetailFragment
-import com.steven.casestudyprofilelist.models.Profile
+import com.steven.casestudyprofilelist.R
 import com.steven.casestudyprofilelist.models.Profiles
 
-class ProfileSlideActivity : FragmentActivity() {
+class ProfileSlideFragment : Fragment() {
 
     private lateinit var viewPager: ViewPager2
     private var pagerSize: Int = 0
 
-    private lateinit var user: Profile
     private lateinit var users: Profiles
     private var userIndex: Int = 0
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profileslide)
-
-        viewPager = findViewById(R.id.viewpager_profileslider)
-
-        if (intent.extras != null) {
-            user = intent.extras!!.get("user") as Profile
-            users = intent.extras!!.get("user_list") as Profiles
-            userIndex = intent.extras!!.get("user_index") as Int
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        if (arguments != null) {
+            users = requireArguments().get("user_list") as Profiles
+            userIndex = requireArguments().get("user_index") as Int
 
             pagerSize = users.profiles.size
         }
+        return inflater.inflate(R.layout.activity_profileslide, container, false)
+    }
 
-        val pagerAdapter = SlideAdapter(this)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewPager = view.findViewById(R.id.viewpager_profileslider)
+
+        val pagerAdapter = SlideAdapter(requireActivity())
         viewPager.adapter = pagerAdapter
         viewPager.setCurrentItem(userIndex, false)
     }
