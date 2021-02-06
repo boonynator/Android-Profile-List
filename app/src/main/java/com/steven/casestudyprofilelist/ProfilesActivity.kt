@@ -3,15 +3,23 @@ package com.steven.casestudyprofilelist
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.steven.casestudyprofilelist.fragments.ProfileDetailFragment
 import com.steven.casestudyprofilelist.helpers.GsonProfileParser
+import com.steven.casestudyprofilelist.models.Location
+import com.steven.casestudyprofilelist.models.Profile
 import com.steven.casestudyprofilelist.models.Profiles
 
+/**
+ * Main Activity which holds the Profiles RecyclerView.
+ */
 class ProfilesActivity : AppCompatActivity() {
 
     companion object {
@@ -20,7 +28,7 @@ class ProfilesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_profiles)
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_profiles)
         val recyclerViewAdapter = ProfileAdapter(Profiles(emptyList()), this)
@@ -31,27 +39,32 @@ class ProfilesActivity : AppCompatActivity() {
         }
 
         recyclerViewAdapter.addItems(GsonProfileParser(applicationContext).readDataFromJson())
+        recyclerViewAdapter.addItems(
+            Profiles(
+                listOf(
+                    Profile(
+                        "Gustav",
+                        19,
+                        "MALE",
+                        "I can dance.",
+                        Location("Hamburg", "22397")
+                    )
+                )
+            )
+        )
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    class ProfileAdapter(private var models: Profiles, val context: Context) :
+    /**
+     * Implements the logic for the ProfileAdapter.
+     * @param models Profiles data object holding each Profile to show on the View
+     * @param context Context on which the adapter operates
+     */
+    class ProfileAdapter(private val models: Profiles, val context: Context) :
         RecyclerView.Adapter<ProfileAdapter.ViewHolder>() {
 
+        /**
+         * Implements the ViewHolder for the ProfileAdapter.
+         */
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val avatarView: ImageView = view.findViewById(R.id.imageview_profile_avatar)
             val nameView: TextView = view.findViewById(R.id.textview_profile_name)
@@ -63,23 +76,22 @@ class ProfilesActivity : AppCompatActivity() {
                 view.setOnClickListener {
                     val intent = Intent(context, ProfileDetailActivity::class.java)
                     val bundle = Bundle()
-
-                    bundle.putString("gender", models.profiles[adapterPosition].gender)
-                    bundle.putString("name", models.profiles[adapterPosition].name)
-                    bundle.putString("description", models.profiles[adapterPosition].description)
-                    if (models.profiles[adapterPosition].age != null) {
-                        bundle.putInt("age", models.profiles[adapterPosition].age!!)
-                    }
-                    bundle.putParcelable("location", models.profiles[adapterPosition].location)
+                    bundle.putParcelable("user", models.profiles[adapterPosition])
+                    bundle.putParcelable("user_list", models)
+                    bundle.putInt("user_index", adapterPosition)
                     intent.putExtras(bundle)
                     context.startActivity(intent)
                 }
             }
         }
 
+        /**
+         * Implements the functionality of adding items to the models data object.
+         */
         fun addItems(profilesToAdd: Profiles) {
-            models = profilesToAdd
-            notifyDataSetChanged()
+            val startPosition = models.profiles.size
+            models.profiles += profilesToAdd.profiles
+            notifyItemRangeInserted(startPosition, profilesToAdd.profiles.size)
         }
 
         override fun onCreateViewHolder(
@@ -102,14 +114,19 @@ class ProfilesActivity : AppCompatActivity() {
             val age = models.profiles[position].age
 
             if (age != null) {
-                val formattedName = "${models.profiles[position].name}, "
-                holder.nameView.text = formattedName
+                holder.nameView.text =
+                    context.getString(R.string.formatted_user_name, models.profiles[position].name)
                 holder.ageView.text = age.toString()
+                holder.ageView.visibility = View.VISIBLE
             } else {
                 holder.nameView.text = models.profiles[position].name
+                holder.ageView.visibility = View.GONE
             }
 
-            holder.zipView.text = "${models.profiles[position].location.zip} "
+            holder.zipView.text = context.getString(
+                R.string.formatted_user_zip,
+                models.profiles[position].location.zip
+            )
             holder.cityView.text = models.profiles[position].location.city
         }
 
