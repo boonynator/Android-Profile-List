@@ -30,7 +30,7 @@ class ProfileSlideFragment : Fragment() {
 
             pagerSize = users.profiles.size
         }
-        return inflater.inflate(R.layout.activity_profileslide, container, false)
+        return inflater.inflate(R.layout.fragment_profileslide, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

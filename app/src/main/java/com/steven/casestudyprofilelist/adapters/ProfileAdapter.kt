@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.steven.casestudyprofilelist.R
 import com.steven.casestudyprofilelist.fragments.ProfileSlideFragment
+import com.steven.casestudyprofilelist.models.Gender
 import com.steven.casestudyprofilelist.models.Profiles
 
 /**
@@ -57,19 +58,24 @@ class ProfileAdapter(private val models: Profiles, private val context: Context)
         notifyItemRangeInserted(startPosition, profilesToAdd.profiles.size)
     }
 
+    fun addItemsToBeginning(profilesToAdd: Profiles) {
+        models.profiles = profilesToAdd.profiles + models.profiles
+        notifyItemRangeChanged(0, models.profiles.size)
+    }
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.row_item, parent, false)
+            .inflate(R.layout.profile_row_item, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.avatarView
             .setImageResource(
-                if (models.profiles[position].gender == "MALE")
+                if (models.profiles[position].gender == Gender.MALE)
                     R.drawable.ic_user_male
                 else R.drawable.ic_female_user
             )

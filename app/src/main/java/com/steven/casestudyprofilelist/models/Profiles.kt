@@ -10,10 +10,14 @@ data class Profiles(var profiles: List<Profile>) : Parcelable
 data class Profile(
     val name: String,
     val age: Int?,
-    val gender: String,
+    val gender: Gender,
     val description: String,
     val location: Location
 ) : Parcelable
 
 @Parcelize
 data class Location(val city: String, val zip: String) : Parcelable
+
+enum class Gender {
+    MALE, FEMALE
+}

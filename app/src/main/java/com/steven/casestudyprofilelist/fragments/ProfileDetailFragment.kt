@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.steven.casestudyprofilelist.R
+import com.steven.casestudyprofilelist.models.Gender
 import com.steven.casestudyprofilelist.models.Profiles
 
 class ProfileDetailFragment : Fragment() {
@@ -67,7 +68,7 @@ class ProfileDetailFragment : Fragment() {
 
         view.findViewById<ImageView>(R.id.imageview_profiledetails_avatar)
             .setImageResource(
-                if (profiles[userIndex].gender == "MALE")
+                if (profiles[userIndex].gender == Gender.MALE)
                     R.drawable.ic_user_male_128
                 else R.drawable.ic_female_user_128
             )

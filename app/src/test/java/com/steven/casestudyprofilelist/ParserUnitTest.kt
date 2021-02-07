@@ -3,6 +3,7 @@ package com.steven.casestudyprofilelist
 import android.content.Context
 import android.content.res.AssetManager
 import com.steven.casestudyprofilelist.helpers.profilesFromJson
+import com.steven.casestudyprofilelist.models.Gender
 import com.steven.casestudyprofilelist.models.Location
 import com.steven.casestudyprofilelist.models.Profile
 import com.steven.casestudyprofilelist.models.Profiles
@@ -11,12 +12,12 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.anyString
-import org.mockito.MockitoAnnotations
+import org.mockito.MockitoAnnotations.initMocks
 import java.io.FileNotFoundException
 
 class ParserUnitTest {
 
-    val parserTestTag = "Parser Unit Test Log"
+    private val parserTestTag = "Parser Unit Test Log"
 
     @Mock
     lateinit var mockContext: Context
@@ -58,7 +59,7 @@ class ParserUnitTest {
         }
         """.trimIndent()
 
-        MockitoAnnotations.initMocks(this)
+        initMocks(this)
 
         `when`(mockContext.assets).thenReturn(mockAssetManager)
         `when`(mockContext.assets.open(fileName)).thenReturn(jsonString.byteInputStream())
@@ -67,8 +68,8 @@ class ParserUnitTest {
         val actualProfiles =
             Profiles(
                 listOf(
-                    Profile("Mia", 22, "FEMALE", defaultDescription, Location("Hamburg", "20095")),
-                    Profile("Jonas", null, "MALE", defaultDescription, Location("Hamburg", "20095"))
+                    Profile("Mia", 22, Gender.FEMALE, defaultDescription, Location("Hamburg", "20095")),
+                    Profile("Jonas", null, Gender.MALE, defaultDescription, Location("Hamburg", "20095"))
                 )
             )
 
@@ -82,7 +83,7 @@ class ParserUnitTest {
     fun test_emptyJson() {
         val jsonString = ""
 
-        MockitoAnnotations.initMocks(this)
+        initMocks(this)
 
         `when`(mockContext.assets).thenReturn(mockAssetManager)
         `when`(mockContext.assets.open(anyString())).thenReturn(jsonString.byteInputStream())
@@ -98,7 +99,7 @@ class ParserUnitTest {
      */
     @Test
     fun test_fileNotFound() {
-        MockitoAnnotations.initMocks(this)
+        initMocks(this)
 
         `when`(mockContext.assets).thenReturn(mockAssetManager)
         `when`(mockContext.assets.open(anyString())).thenThrow(FileNotFoundException())
