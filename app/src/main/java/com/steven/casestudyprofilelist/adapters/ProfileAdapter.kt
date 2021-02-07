@@ -58,6 +58,9 @@ class ProfileAdapter(private val models: Profiles, private val context: Context)
         notifyItemRangeInserted(startPosition, profilesToAdd.profiles.size)
     }
 
+    /**
+     * Implements the functionality of adding items to the beginning of the models data object.
+     */
     fun addItemsToBeginning(profilesToAdd: Profiles) {
         models.profiles = profilesToAdd.profiles + models.profiles
         notifyItemRangeChanged(0, models.profiles.size)

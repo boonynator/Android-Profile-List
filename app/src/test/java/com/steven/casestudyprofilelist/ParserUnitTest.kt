@@ -12,7 +12,7 @@ import org.junit.Test
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.anyString
-import org.mockito.MockitoAnnotations.initMocks
+import org.mockito.MockitoAnnotations.openMocks
 import java.io.FileNotFoundException
 
 class ParserUnitTest {
@@ -24,6 +24,7 @@ class ParserUnitTest {
 
     @Mock
     lateinit var mockAssetManager: AssetManager
+
 
     /**
      * Tests functionality of parsing JSON to Profiles
@@ -59,7 +60,7 @@ class ParserUnitTest {
         }
         """.trimIndent()
 
-        initMocks(this)
+        openMocks(this)
 
         `when`(mockContext.assets).thenReturn(mockAssetManager)
         `when`(mockContext.assets.open(fileName)).thenReturn(jsonString.byteInputStream())
@@ -68,8 +69,20 @@ class ParserUnitTest {
         val actualProfiles =
             Profiles(
                 listOf(
-                    Profile("Mia", 22, Gender.FEMALE, defaultDescription, Location("Hamburg", "20095")),
-                    Profile("Jonas", null, Gender.MALE, defaultDescription, Location("Hamburg", "20095"))
+                    Profile(
+                        "Mia",
+                        22,
+                        Gender.FEMALE,
+                        defaultDescription,
+                        Location("Hamburg", "20095")
+                    ),
+                    Profile(
+                        "Jonas",
+                        null,
+                        Gender.MALE,
+                        defaultDescription,
+                        Location("Hamburg", "20095")
+                    )
                 )
             )
 
@@ -83,7 +96,7 @@ class ParserUnitTest {
     fun test_emptyJson() {
         val jsonString = ""
 
-        initMocks(this)
+        openMocks(this)
 
         `when`(mockContext.assets).thenReturn(mockAssetManager)
         `when`(mockContext.assets.open(anyString())).thenReturn(jsonString.byteInputStream())
@@ -99,7 +112,7 @@ class ParserUnitTest {
      */
     @Test
     fun test_fileNotFound() {
-        initMocks(this)
+        openMocks(this)
 
         `when`(mockContext.assets).thenReturn(mockAssetManager)
         `when`(mockContext.assets.open(anyString())).thenThrow(FileNotFoundException())

@@ -42,6 +42,9 @@ class ProfileSlideFragment : Fragment() {
         viewPager.setCurrentItem(userIndex, false)
     }
 
+    /**
+     * Implementation of FragmentStateAdapter for sliding between ProfileDetailFragments
+     */
     private inner class SlideAdapter(fragmentActivity: FragmentActivity) :
         FragmentStateAdapter(fragmentActivity) {
 

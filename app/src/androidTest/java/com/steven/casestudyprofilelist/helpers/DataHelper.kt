@@ -14,6 +14,9 @@ import com.steven.casestudyprofilelist.models.Location
 import com.steven.casestudyprofilelist.models.Profile
 import com.steven.casestudyprofilelist.models.Profiles
 
+/**
+ * User A for UI Tests.
+ */
 val userA = Profile(
     "Gustav",
     29,
@@ -22,6 +25,9 @@ val userA = Profile(
     Location("Hamburg", "22397")
 )
 
+/**
+ * User B for UI Tests.
+ */
 val userB = Profile(
     "Lena",
     null,
@@ -30,6 +36,9 @@ val userB = Profile(
     Location("Hamburg", "20095")
 )
 
+/**
+ * User C for UI Tests.
+ */
 val userC = Profile(
     "Steven",
     22,
