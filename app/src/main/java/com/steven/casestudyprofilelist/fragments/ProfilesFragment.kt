@@ -10,10 +10,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.steven.casestudyprofilelist.R
 import com.steven.casestudyprofilelist.adapters.ProfileAdapter
-import com.steven.casestudyprofilelist.helpers.GsonProfileParser
+import com.steven.casestudyprofilelist.helpers.profilesFromJson
 import com.steven.casestudyprofilelist.models.Profiles
 
 class ProfilesFragment : Fragment() {
+
+    companion object {
+        const val TAG = "Profiles Fragment Log"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +42,7 @@ class ProfilesFragment : Fragment() {
                         DividerItemDecoration.VERTICAL
                     )
                 )
-                profileAdapter.addItems(GsonProfileParser(requireContext()).readDataFromJson())
+                profileAdapter.addItems(profilesFromJson("profiles.json", requireContext(), TAG))
             }
         }
     }
